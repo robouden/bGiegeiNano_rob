@@ -34,6 +34,7 @@
 // 2017-11-24 V1.4.3   Setup for 5 seconds updates test.
 // 2018-02-24 V1.4.4J  Setup for JP 100m TRUNCATION.
 // 2018-06-17 V1.4.5 removed Japanese. trucation
+// 2018-08-03 V1.4.7 5 seconds update display
 
 #include <limits.h>
 #include <SoftwareSerial.h>
@@ -830,13 +831,22 @@ bool gps_gen_timestamp(TinyGPS &gps, char *buf, unsigned long counts, unsigned l
     // display.setCursor(0, offset+16); // textsize*8
     display.setCursor(0, 2); // textsize*8
     if (config.mode == GEIGIE_MODE_USVH) {
-      dtostrf((float)(cpm / config.cpm_factor), 0, 3, strbuffer);
+      if (digitalRead(CUSTOM_FN_PIN)==LOW) {
+        dtostrf((float)(cpb/config.cpm_factor*12), 0, 3, strbuffer);
+        } else {
+        dtostrf((float)(cpm/config.cpm_factor), 0, 3, strbuffer);
+      }
       display.print(strbuffer);
       sprintf_P(strbuffer, PSTR(" uSv/h"));
       display.println(strbuffer);
     }
     else if (config.mode == GEIGIE_MODE_BQM2) {
-      dtostrf((float)(cpm * config.bqm_factor), 0, 3, strbuffer);
+      if (digitalRead(CUSTOM_FN_PIN)==LOW) {
+        dtostrf((float)(cpb* config.bqm_factor*12), 0, 3, strbuffer);
+      } else {
+        dtostrf((float)(cpm * config.bqm_factor), 0, 3, strbuffer);
+      }
+
       display.print(strbuffer);
       sprintf_P(strbuffer, PSTR(" Bq/m2"));
       display.println(strbuffer);
@@ -889,7 +899,11 @@ bool gps_gen_timestamp(TinyGPS &gps, char *buf, unsigned long counts, unsigned l
       } else {
         // Display CPM
         if (cpm > 1000) {
-          dtostrf((float)(cpm / 1000.00), 0, 1, strbuffer);
+          if (digitalRead(CUSTOM_FN_PIN)==LOW){
+            dtostrf((float)(cpb/1000.00*12), 0, 1, strbuffer);
+          }else{
+            dtostrf((float)(cpm/1000.00), 0, 1, strbuffer);
+          }
           strncpy (strbuffer1, strbuffer, 5);
           if (strbuffer1[strlen(strbuffer1) - 1] == '.') {
             strbuffer1[strlen(strbuffer1) - 1] = 0;
@@ -898,6 +912,11 @@ bool gps_gen_timestamp(TinyGPS &gps, char *buf, unsigned long counts, unsigned l
           sprintf_P(strbuffer, PSTR("kCPM "));
           display.print(strbuffer);
         } else {
+          if (digitalRead(CUSTOM_FN_PIN)==LOW){
+            dtostrf((float)cpb*12, 0, 0, strbuffer);
+          }else{
+            dtostrf((float)cpm, 0, 0, strbuffer);
+          }
           dtostrf((float)cpm, 0, 0, strbuffer);
           display.print(strbuffer);
           sprintf_P(strbuffer, PSTR("CPM "));
