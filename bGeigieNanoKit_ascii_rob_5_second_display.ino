@@ -35,7 +35,7 @@
 // 2018-02-24 V1.4.4J  Setup for JP 100m TRUNCATION.
 // 2018-06-17 V1.4.5 removed Japanese. trucation
 // 2018-08-03 V1.4.7 5 seconds update display
-
+// 2019-22-01 V1.4.8 updated copyright year
 #include <limits.h>
 #include <SoftwareSerial.h>
 #include <math.h>
@@ -253,7 +253,7 @@ void setup()
   }
 
   display.setCursor(50, 7);
-  display.print("Safecast 2018");
+  display.print("Safecast 2019");
 
   delay(5000);
   display.clear();
@@ -1032,7 +1032,7 @@ bool gps_gen_timestamp(TinyGPS &gps, char *buf, unsigned long counts, unsigned l
 
 
   display.setCursor(50, 7);
-  display.print("Safecast 2018");
+  display.print("Safecast 2019");
 //       display.display();
 
 
@@ -1183,5 +1183,3 @@ void truncate_100m(char *latitude, char *longitude)
 
 }
 #endif /* JAPAN_POST */
-
-
